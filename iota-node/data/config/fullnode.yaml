@@ -3,6 +3,9 @@
 # Important: update this value to the location you want IOTA to store its database
 db-path: "/opt/iota/db"
 
+# needed for websocket connection
+jsonrpc-server-type: both
+
 # Genesis Configuration
 # Important: update these to the location where the genesis and migration files are stored
 genesis:

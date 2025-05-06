@@ -20,7 +20,7 @@ services:
     command:
       - "--logger.name="
       - "--logger.timeFormat=rfc3339nano"
-      - "--logger.level=info"
+      - "--logger.level=debug"
       - "--l1.packageID=0x1b33a3cf7eb5dde04ed7ae571db1763006811ff6b7bb35b3d1c780de153af9dd"
       - "--l1.targetNetworkName=IOTA"
       - "--l1.websocketURL=ws://iota:9000"
