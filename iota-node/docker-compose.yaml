@@ -1,0 +1,21 @@
+services:
+  fullnode:
+    container_name: iota
+    image: iotaledger/iota-node:mainnet
+    expose:
+      - 9000
+    ports:
+      - "8084:8084/udp" # P2P port
+      - "9000:9000/tcp" # JSON-RPC port
+      - "9184:9184/tcp" # Metrics port
+    volumes:
+      - ./data:/opt/iota/:rw
+    command: [
+      "/usr/local/bin/iota-node",
+      "--config-path",
+      "/opt/iota/config/fullnode.yaml",
+    ]
+
+networks:
+  iota-evm-network:
+    external: true

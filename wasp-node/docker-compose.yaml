@@ -1,21 +1,4 @@
 services:
-  fullnode:
-    container_name: iota
-    image: iotaledger/iota-node:mainnet
-    expose:
-      - 9000
-    ports:
-      - "8084:8084/udp" # P2P port
-      - "9000:9000/tcp" # JSON-RPC port
-      - "9184:9184/tcp" # Metrics port
-    volumes:
-      - ./data/iota:/opt/iota/:rw
-    command: [
-      "/usr/local/bin/iota-node",
-      "--config-path",
-      "/opt/iota/config/fullnode.yaml",
-    ]
-
   wasp:
     container_name: wasp
     image: iotaledger/wasp:v2.0.0
@@ -31,7 +14,7 @@ services:
       # peering
       - "4000:4000/tcp"
     volumes:
-      - ./data/wasp:/app/waspdb
+      - ./data:/app/waspdb
     command:
       - "--logger.name="
       - "--logger.timeFormat=rfc3339nano"
@@ -53,3 +36,7 @@ services:
       - "--users=/app/waspdb/users.json"
       - "--stateManager.pruningMinStatesToKeep=${WASP_PRUNING_MIN_STATES_TO_KEEP:-0}"
       - "--snapshots.networkPaths=${WASP_SNAPSHOT_NETWORK_PATHS:-[]}"
+
+networks:
+  iota-evm-network:
+    external: true        
