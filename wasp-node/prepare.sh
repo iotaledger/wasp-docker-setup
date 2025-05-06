@@ -17,6 +17,7 @@ read -p "Download WASP database (y/*)? " ASK
 	exit 0
 }
 
+curl -L https://wasp-backup.mainnet.iota.cafe/dbs/wasp/latest-wasp_chains.tgz | tar xzv -C "$DATA_DIR/"
 
 # fix permissions
-chown 65532:65532 "$WASP_DIR" -R
+chown 65532:65532 "$DATA_DIR" -R

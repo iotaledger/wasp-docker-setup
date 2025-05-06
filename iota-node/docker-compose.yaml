@@ -2,6 +2,8 @@ services:
   fullnode:
     container_name: iota
     image: iotaledger/iota-node:mainnet
+    networks:
+      - iota-evm-network
     expose:
       - 9000
     ports:
