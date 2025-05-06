@@ -1,0 +1,55 @@
+services:
+  fullnode:
+    container_name: iota
+    image: iotaledger/iota-node:mainnet
+    expose:
+      - 9000
+    ports:
+      - "8084:8084/udp" # P2P port
+      - "9000:9000/tcp" # JSON-RPC port
+      - "9184:9184/tcp" # Metrics port
+    volumes:
+      - ./data/iota:/opt/iota/:rw
+    command: [
+      "/usr/local/bin/iota-node",
+      "--config-path",
+      "/opt/iota/config/fullnode.yaml",
+    ]
+
+  wasp:
+    container_name: wasp
+    image: iotaledger/wasp:v2.0.0
+    stop_grace_period: 5m
+    restart: unless-stopped
+    ports:
+      # api port
+      - "127.0.0.1:9090:9090/tcp"
+
+      # prometheus metrics
+      - "127.0.0.1:9312:9312/tcp"
+
+      # peering
+      - "4000:4000/tcp"
+    volumes:
+      - ./data/wasp:/app/waspdb
+    command:
+      - "--logger.name="
+      - "--logger.timeFormat=rfc3339nano"
+      - "--logger.level=info"
+      - "--l1.packageID=0x1b33a3cf7eb5dde04ed7ae571db1763006811ff6b7bb35b3d1c780de153af9dd"
+      - "--l1.targetNetworkName=IOTA"
+      - "--l1.websocketURL=ws://iota:9000"
+      - "--l1.httpURL=http://iota:9000"
+      - "--db.chainState.path=/app/waspdb/chains/data"
+      - "--p2p.identity.filePath=/app/waspdb/identity/identity.key"
+      - "--p2p.db.path=/app/waspdb/p2pstore"
+      - "--registries.chains.filePath=/app/waspdb/chains/chain_registry.json"
+      - "--registries.dkShares.path=/app/waspdb/dkshares"
+      - "--registries.trustedPeers.filePath=/app/waspdb/trusted_peers.json"
+      - "--registries.consensusState.path=/app/waspdb/chains/consensus"
+      - "--wal.path=/app/waspdb/wal"
+      - "--prometheus.enabled=true"
+      - "--prometheus.bindAddress=wasp:9312"
+      - "--users=/app/waspdb/users.json"
+      - "--stateManager.pruningMinStatesToKeep=${WASP_PRUNING_MIN_STATES_TO_KEEP:-0}"
+      - "--snapshots.networkPaths=${WASP_SNAPSHOT_NETWORK_PATHS:-[]}"
