@@ -1,7 +1,7 @@
 services:
   wasp:
     container_name: wasp
-    image: iotaledger/wasp:v2.0.0
+    image: iotaledger/wasp:latest
     stop_grace_period: 5m
     restart: unless-stopped
     ports:
@@ -41,4 +41,4 @@ services:
 
 networks:
   iota-evm-network:
-    external: true        
+    external: true
